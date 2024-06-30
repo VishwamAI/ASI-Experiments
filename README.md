@@ -7,7 +7,7 @@ The ASI (Artificial Superintelligence) Project aims to develop an advanced AI sy
 To set up the project environment, follow these steps:
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/ASI_Project.git
+   git clone https://github.com/VishwamAI/ASI-Experiments
    cd ASI_Project
    ```
 2. Install the required dependencies:
