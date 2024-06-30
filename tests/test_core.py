@@ -18,8 +18,14 @@ class TestASIMainControlLoop(unittest.TestCase):
         input_data = {"key": "value"}
         self.asi.process_input(input_data)
         decision = self.asi.make_decision()
-        self.assertEqual(decision, "processed_decision_based_on_input")
-        self.assertEqual(self.asi.state["decision"], "processed_decision_based_on_input")
+        self.assertEqual(decision, "decision_based_on_key_value")
+        self.assertEqual(self.asi.state["decision"], "decision_based_on_key_value")
+
+        input_data = {"key": "other_value"}
+        self.asi.process_input(input_data)
+        decision = self.asi.make_decision()
+        self.assertEqual(decision, "default_decision")
+        self.assertEqual(self.asi.state["decision"], "default_decision")
 
     def test_execute_action(self):
         action = {"action": "test"}
