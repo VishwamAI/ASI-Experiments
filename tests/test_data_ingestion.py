@@ -38,6 +38,20 @@ class TestDataIngestion(unittest.TestCase):
         self.assertIn(("https://api.example.com/data1", "API error", 500), errors)
         self.assertIn(("https://api.example.com/data2", "API error", 500), errors)
 
+    @patch('learning.data_ingestion.requests.get')
+    def test_fetch_data_no_response(self, mock_get):
+        # Mock the API response to be None
+        mock_get.return_value = None
+
+        api_urls = ["https://api.example.com/data1", "https://api.example.com/data2"]
+        data_ingestion = DataIngestion(api_urls)
+        data, errors = data_ingestion.fetch_data()
+
+        self.assertEqual(data, [])
+        self.assertEqual(len(errors), 2)
+        self.assertIn(("https://api.example.com/data1", "No Response", "No Response"), errors)
+        self.assertIn(("https://api.example.com/data2", "No Response", "No Response"), errors)
+
     @patch('builtins.open', new_callable=mock_open)
     def test_save_data_success_json(self, mock_file):
         api_urls = ["https://api.example.com/data1", "https://api.example.com/data2"]
@@ -69,7 +83,7 @@ class TestDataIngestion(unittest.TestCase):
     @patch('builtins.open', new_callable=mock_open)
     def test_save_data_success_xml(self, mock_file):
         api_urls = ["https://api.example.com/data1", "https://api.example.com/data2"]
-        data_ingestion = DataIngestion(data_ingestion)
+        data_ingestion = DataIngestion(api_urls)
         data = {"key": "value"}
         file_path = "data.xml"
 
