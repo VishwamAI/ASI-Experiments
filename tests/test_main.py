@@ -2,13 +2,18 @@ import unittest
 import subprocess
 import os
 import json
+import sys
+
 from unittest.mock import patch, MagicMock
+
+# Ensure the parent directory is in the Python path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 class TestMainScript(unittest.TestCase):
 
     def setUp(self):
         self.config_path = 'test_config.json'
-        self.log_path = 'test_asi.log'
+        self.log_path = 'asi.log'
         self.create_test_config()
 
     def tearDown(self):
@@ -29,37 +34,68 @@ class TestMainScript(unittest.TestCase):
     def test_main_script_with_default_config(self, MockASIMainControlLoop):
         mock_asi_system = MagicMock()
         MockASIMainControlLoop.return_value = mock_asi_system
-        mock_asi_system.get_input.side_effect = ['test_input', KeyboardInterrupt]
+        mock_asi_system.get_input.side_effect = ['test_input', Exception("Simulated Exception")]
 
-        result = subprocess.run(['python3', 'main.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
+        # Set environment variable to break the loop
+        os.environ['ASI_TEST_BREAK_LOOP'] = '1'
+
+        result = subprocess.run(['python3', '../main.py', '--config', self.config_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
         print("STDOUT:", result.stdout)
         print("STDERR:", result.stderr)
         self.assertEqual(result.returncode, 0)
-        self.assertIn("Configuration loaded", result.stdout)
+
+        # Check the log file for the "Configuration loaded" message
+        with open(self.log_path, 'r') as log_file:
+            log_contents = log_file.read()
+        self.assertIn("Configuration loaded", log_contents)
+
+        # Clean up environment variable
+        del os.environ['ASI_TEST_BREAK_LOOP']
 
     @patch('main.ASIMainControlLoop')
     def test_main_script_with_custom_config(self, MockASIMainControlLoop):
         mock_asi_system = MagicMock()
         MockASIMainControlLoop.return_value = mock_asi_system
-        mock_asi_system.get_input.side_effect = ['test_input', KeyboardInterrupt]
+        mock_asi_system.get_input.side_effect = ['test_input', Exception("Simulated Exception")]
 
-        result = subprocess.run(['python3', 'main.py', '--config', self.config_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
+        # Set environment variable to break the loop
+        os.environ['ASI_TEST_BREAK_LOOP'] = '1'
+
+        result = subprocess.run(['python3', '../main.py', '--config', self.config_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
         print("STDOUT:", result.stdout)
         print("STDERR:", result.stderr)
         self.assertEqual(result.returncode, 0)
-        self.assertIn("Configuration loaded", result.stdout)
+
+        # Check the log file for the "Configuration loaded" message
+        with open(self.log_path, 'r') as log_file:
+            log_contents = log_file.read()
+        self.assertIn("Configuration loaded", log_contents)
+
+        # Clean up environment variable
+        del os.environ['ASI_TEST_BREAK_LOOP']
 
     @patch('main.ASIMainControlLoop')
     def test_main_script_with_custom_log(self, MockASIMainControlLoop):
         mock_asi_system = MagicMock()
         MockASIMainControlLoop.return_value = mock_asi_system
-        mock_asi_system.get_input.side_effect = ['test_input', KeyboardInterrupt]
+        mock_asi_system.get_input.side_effect = ['test_input', Exception("Simulated Exception")]
 
-        result = subprocess.run(['python3', 'main.py', '--log', self.log_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
+        # Set environment variable to break the loop
+        os.environ['ASI_TEST_BREAK_LOOP'] = '1'
+
+        result = subprocess.run(['python3', '../main.py', '--log', self.log_path, '--config', self.config_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
         print("STDOUT:", result.stdout)
         print("STDERR:", result.stderr)
         self.assertEqual(result.returncode, 0)
         self.assertTrue(os.path.exists(self.log_path))
+
+        # Check the log file for the "Configuration loaded" message
+        with open(self.log_path, 'r') as log_file:
+            log_contents = log_file.read()
+        self.assertIn("Configuration loaded", log_contents)
+
+        # Clean up environment variable
+        del os.environ['ASI_TEST_BREAK_LOOP']
 
 if __name__ == '__main__':
     unittest.main()

@@ -35,6 +35,8 @@ class ASIMainControlLoop:
                 self.state["decision"] = "decision_based_on_key_value"
             else:
                 self.state["decision"] = "default_decision"
+        else:
+            self.state["decision"] = "default_decision"
         return self.state["decision"]
 
     def execute_action(self, action):

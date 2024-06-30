@@ -1,4 +1,10 @@
 import unittest
+import sys
+import os
+
+# Ensure the parent directory is in the Python path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from core.core import ASIMainControlLoop
 
 class TestASIMainControlLoop(unittest.TestCase):
