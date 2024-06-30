@@ -36,7 +36,15 @@ class TestASIMainControlLoop(unittest.TestCase):
         self.assertEqual(self.asi.state["decision"], "default_decision")
 
     def test_execute_action(self):
-        action = {"action": "test"}
+        action = "analyze_data"
+        self.asi.execute_action(action)
+        self.assertEqual(self.asi.state["action"], action)
+
+        action = "update_model"
+        self.asi.execute_action(action)
+        self.assertEqual(self.asi.state["action"], action)
+
+        action = "unknown_action"
         self.asi.execute_action(action)
         self.assertEqual(self.asi.state["action"], action)
 
