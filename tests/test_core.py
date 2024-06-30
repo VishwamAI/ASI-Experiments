@@ -14,6 +14,14 @@ class TestASIMainControlLoop(unittest.TestCase):
         self.asi.process_input(input_data)
         self.assertEqual(self.asi.state["input_data"], input_data)
 
+        input_data = '{"key": "value"}'
+        self.asi.process_input(input_data)
+        self.assertEqual(self.asi.state["input_data"], {"key": "value"})
+
+        input_data = "invalid_json"
+        self.asi.process_input(input_data)
+        self.assertIsNone(self.asi.state["input_data"])
+
     def test_make_decision(self):
         input_data = {"key": "value"}
         self.asi.process_input(input_data)
