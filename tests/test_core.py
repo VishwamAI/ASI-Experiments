@@ -52,5 +52,47 @@ class TestASIMainControlLoop(unittest.TestCase):
         # This test will need to be adapted once the run method is fully implemented
         pass
 
+    def test_process_input_edge_cases(self):
+        # Test with empty dictionary
+        input_data = {}
+        self.asi.process_input(input_data)
+        self.assertEqual(self.asi.state["input_data"], input_data)
+
+        # Test with nested dictionary
+        input_data = {"key": {"nested_key": "nested_value"}}
+        self.asi.process_input(input_data)
+        self.assertEqual(self.asi.state["input_data"], input_data)
+
+        # Test with large input data
+        input_data = {"key": "value" * 1000}
+        self.asi.process_input(input_data)
+        self.assertEqual(self.asi.state["input_data"], input_data)
+
+    def test_make_decision_edge_cases(self):
+        # Test with empty input data
+        input_data = {}
+        self.asi.process_input(input_data)
+        decision = self.asi.make_decision()
+        self.assertEqual(decision, "default_decision")
+        self.assertEqual(self.asi.state["decision"], "default_decision")
+
+        # Test with unexpected input data
+        input_data = {"unexpected_key": "unexpected_value"}
+        self.asi.process_input(input_data)
+        decision = self.asi.make_decision()
+        self.assertEqual(decision, "default_decision")
+        self.assertEqual(self.asi.state["decision"], "default_decision")
+
+    def test_execute_action_edge_cases(self):
+        # Test with empty action
+        action = ""
+        self.asi.execute_action(action)
+        self.assertEqual(self.asi.state["action"], action)
+
+        # Test with None action
+        action = None
+        self.asi.execute_action(action)
+        self.assertEqual(self.asi.state["action"], action)
+
 if __name__ == "__main__":
     unittest.main()
