@@ -13,7 +13,7 @@ class TestDecisionMaking(unittest.TestCase):
         self.assertIsInstance(results, dict)
         self.assertEqual(len(results), 3)
         for strategy, metrics in results.items():
-            self.assertIn(strategy, ['strategy_1', 'strategy_2', 'strategy_3'])
+            self.assertIn(strategy, ['logistic_regression', 'decision_tree', 'svm'])
             self.assertIsInstance(metrics, dict)
             self.assertIn('accuracy', metrics)
             self.assertIn('precision', metrics)
