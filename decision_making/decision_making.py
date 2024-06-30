@@ -1,5 +1,7 @@
 import numpy as np
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
 
 class DecisionMaking:
     def __init__(self):
@@ -24,7 +26,7 @@ class DecisionMaking:
         results = {}
         for strategy in strategies:
             # Example logic: calculate performance metrics for each strategy
-            predictions = self._mock_predictions(data, strategy)
+            predictions = self._predict_with_logistic_regression(data, labels)
             results[strategy] = {
                 'accuracy': accuracy_score(labels, predictions),
                 'precision': precision_score(labels, predictions, average='weighted'),
@@ -73,20 +75,22 @@ class DecisionMaking:
             outcomes[decision] = float(np.sum(data))
         return outcomes
 
-    def _mock_predictions(self, data, strategy):
+    def _predict_with_logistic_regression(self, data, labels):
         """
-        Generate mock predictions for a given strategy.
+        Generate predictions using logistic regression.
 
         Parameters:
         - data: numpy array or pandas DataFrame
             The data to be used for generating predictions.
-        - strategy: str
-            The strategy for which to generate predictions.
+        - labels: numpy array or pandas Series
+            The true labels for the data.
 
         Returns:
         - numpy array
-            Mock predictions for the given strategy.
+            Predictions for the given data.
         """
-        # Example logic: generate random predictions
-        np.random.seed(0)
-        return np.random.choice([0, 1], size=len(data))
+        X_train, X_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, random_state=0)
+        model = LogisticRegression(random_state=0)
+        model.fit(X_train, y_train)
+        predictions = model.predict(X_test)
+        return predictions
