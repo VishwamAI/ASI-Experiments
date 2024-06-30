@@ -51,8 +51,8 @@ class DecisionMaking:
         decisions = ['decision_1', 'decision_2', 'decision_3']
         risks = {}
         for decision in decisions:
-            # Example logic: calculate the standard deviation of the data for each decision
-            risks[decision] = np.std(data)
+            # Example logic: calculate the variance of the data for each decision
+            risks[decision] = np.var(data)
         return risks
 
     def predict_outcomes(self, data):
@@ -71,8 +71,8 @@ class DecisionMaking:
         decisions = ['decision_1', 'decision_2', 'decision_3']
         outcomes = {}
         for decision in decisions:
-            # Example logic: calculate the sum of the data for each decision
-            outcomes[decision] = float(np.sum(data))
+            # Example logic: calculate the mean of the data for each decision
+            outcomes[decision] = float(np.mean(data))
         return outcomes
 
     def _predict_with_logistic_regression(self, data, labels):
