@@ -40,14 +40,17 @@ class ASIMainControlLoop:
                 # Use the DecisionMaking module to evaluate strategies, assess risks, and predict outcomes
                 data = input_data.get("data", [])
                 labels = input_data.get("labels", [])
-                strategies_results = self.decision_making.evaluate_strategies(data, labels)
-                risks = self.decision_making.assess_risks(data)
-                outcomes = self.decision_making.predict_outcomes(data)
-                self.state["decision"] = {
-                    "strategies_results": strategies_results,
-                    "risks": risks,
-                    "outcomes": outcomes
-                }
+                if data and labels:
+                    strategies_results = self.decision_making.evaluate_strategies(data, labels)
+                    risks = self.decision_making.assess_risks(data)
+                    outcomes = self.decision_making.predict_outcomes(data)
+                    self.state["decision"] = {
+                        "strategies_results": strategies_results,
+                        "risks": risks,
+                        "outcomes": outcomes
+                    }
+                else:
+                    self.state["decision"] = "default_decision"
         else:
             self.state["decision"] = "default_decision"
         return self.state["decision"]
