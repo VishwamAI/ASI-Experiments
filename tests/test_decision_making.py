@@ -5,8 +5,11 @@ from decision_making.decision_making import DecisionMaking
 class TestDecisionMaking(unittest.TestCase):
     def setUp(self):
         self.decision_making = DecisionMaking()
-        self.data = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-        self.labels = np.array([0, 1, 1])
+        self.data = np.array([
+            [1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14, 15],
+            [16, 17, 18], [19, 20, 21], [22, 23, 24], [25, 26, 27], [28, 29, 30]
+        ])
+        self.labels = np.array([0, 1, 1, 0, 1, 0, 1, 0, 1, 0])
 
     def test_evaluate_strategies(self):
         results = self.decision_making.evaluate_strategies(self.data, self.labels)
