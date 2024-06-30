@@ -19,7 +19,7 @@ class DataIngestion:
                 logging.info(f"Data fetched successfully from {api_url}")
             except requests.exceptions.RequestException as e:
                 logging.error(f"Error fetching data from {api_url}: {e}")
-                errors.append((api_url, str(e)))
+                errors.append((api_url, str(e), response.status_code if response else 'No Response'))
         return all_data, errors
 
     def save_data(self, data, file_path, format='json'):

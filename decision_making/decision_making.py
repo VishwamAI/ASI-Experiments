@@ -3,7 +3,8 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import GridSearchCV
 
 class DecisionMaking:
     def __init__(self):
@@ -23,17 +24,15 @@ class DecisionMaking:
         - dict
             A dictionary containing the evaluation results for each strategy.
         """
-        # Implementing strategy evaluation logic
         strategies = ['logistic_regression', 'decision_tree', 'svm']
         results = {}
         for strategy in strategies:
-            # Example logic: calculate performance metrics for each strategy
-            predictions = self._predict_with_model(data, labels, strategy)
+            predictions, y_test = self._predict_with_model(data, labels, strategy)
             results[strategy] = {
-                'accuracy': accuracy_score(labels, predictions),
-                'precision': precision_score(labels, predictions, average='weighted'),
-                'recall': recall_score(labels, predictions, average='weighted'),
-                'f1_score': f1_score(labels, predictions, average='weighted')
+                'accuracy': accuracy_score(y_test, predictions),
+                'precision': precision_score(y_test, predictions, average='weighted'),
+                'recall': recall_score(y_test, predictions, average='weighted'),
+                'f1_score': f1_score(y_test, predictions, average='weighted')
             }
         return results
 
@@ -49,11 +48,9 @@ class DecisionMaking:
         - dict
             A dictionary containing the risk assessment results for each decision.
         """
-        # Implementing risk assessment logic
         decisions = ['decision_1', 'decision_2', 'decision_3']
         risks = {}
         for decision in decisions:
-            # Example logic: calculate the probability of undesirable events and their potential impact
             risks[decision] = np.var(data) * np.mean(data)  # Example risk calculation
         return risks
 
@@ -69,11 +66,9 @@ class DecisionMaking:
         - dict
             A dictionary containing the predicted outcomes for each decision.
         """
-        # Implementing outcome prediction logic
         decisions = ['decision_1', 'decision_2', 'decision_3']
         outcomes = {}
         for decision in decisions:
-            # Example logic: calculate the mean of the data for each decision
             outcomes[decision] = float(np.mean(data) + np.std(data))  # Example outcome prediction
         return outcomes
 
@@ -90,18 +85,29 @@ class DecisionMaking:
             The type of model to use for predictions.
 
         Returns:
-        - numpy array
-            Predictions for the given data.
+        - tuple
+            A tuple containing the predictions and the true labels for the testing set.
         """
         if model_type == 'logistic_regression':
             model = LogisticRegression(random_state=0)
+            param_grid = {'C': [0.1, 1, 10, 100]}
         elif model_type == 'decision_tree':
             model = DecisionTreeClassifier(random_state=0)
+            param_grid = {'max_depth': [None, 10, 20, 30]}
         elif model_type == 'svm':
             model = SVC(random_state=0)
+            param_grid = {'C': [0.1, 1, 10, 100], 'kernel': ['linear', 'rbf']}
         else:
             raise ValueError(f"Unknown model type: {model_type}")
 
-        model.fit(data, labels)
-        predictions = model.predict(data)
-        return predictions
+        # Split the data into training and testing sets
+        X_train, X_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, random_state=0)
+
+        # Perform hyperparameter tuning using GridSearchCV
+        grid_search = GridSearchCV(model, param_grid, cv=5, scoring='accuracy')
+        grid_search.fit(X_train, y_train)
+        best_model = grid_search.best_estimator_
+
+        # Generate predictions on the testing data
+        predictions = best_model.predict(X_test)
+        return predictions, y_test
