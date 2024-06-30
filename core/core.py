@@ -17,9 +17,14 @@ class ASIMainControlLoop:
         self.state["input_data"] = input_data
 
     def make_decision(self):
-        # Placeholder for decision-making logic
+        # Enhanced decision-making logic
         if self.state["input_data"]:
-            self.state["decision"] = "processed_decision_based_on_input"
+            # Example decision-making algorithm
+            input_data = self.state["input_data"]
+            if "key" in input_data and input_data["key"] == "value":
+                self.state["decision"] = "decision_based_on_key_value"
+            else:
+                self.state["decision"] = "default_decision"
         return self.state["decision"]
 
     def execute_action(self, action):
