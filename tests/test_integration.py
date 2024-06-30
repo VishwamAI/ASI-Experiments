@@ -33,7 +33,7 @@ class TestIntegration(unittest.TestCase):
         self.assertIsInstance(outcomes, dict)
 
         for strategy, metrics in strategies_results.items():
-            self.assertIn(strategy, ['strategy_1', 'strategy_2', 'strategy_3'])
+            self.assertIn(strategy, ['logistic_regression', 'decision_tree', 'svm'])
             self.assertIsInstance(metrics, dict)
             self.assertIn('accuracy', metrics)
             self.assertIn('precision', metrics)

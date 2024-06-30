@@ -31,6 +31,9 @@ class TestDecisionMaking(unittest.TestCase):
         for decision, value in risks.items():
             self.assertIn(decision, ['decision_1', 'decision_2', 'decision_3'])
             self.assertIsInstance(value, float)
+            # Check that the risk value is calculated as the product of variance and mean
+            expected_risk = np.var(self.data) * np.mean(self.data)
+            self.assertAlmostEqual(value, expected_risk, places=5)
 
     def test_predict_outcomes(self):
         outcomes = self.decision_making.predict_outcomes(self.data)
@@ -39,6 +42,9 @@ class TestDecisionMaking(unittest.TestCase):
         for decision, value in outcomes.items():
             self.assertIn(decision, ['decision_1', 'decision_2', 'decision_3'])
             self.assertIsInstance(value, float)
+            # Check that the outcome value is calculated as the sum of mean and standard deviation
+            expected_outcome = np.mean(self.data) + np.std(self.data)
+            self.assertAlmostEqual(value, expected_outcome, places=5)
 
 if __name__ == '__main__':
     unittest.main()

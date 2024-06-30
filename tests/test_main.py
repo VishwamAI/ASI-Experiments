@@ -14,6 +14,7 @@ class TestMainScript(unittest.TestCase):
     def setUp(self):
         self.config_path = 'test_config.json'
         self.log_path = 'asi.log'
+        self.main_script_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'main.py')
         self.create_test_config()
 
     def tearDown(self):
@@ -39,7 +40,7 @@ class TestMainScript(unittest.TestCase):
         # Set environment variable to break the loop
         os.environ['ASI_TEST_BREAK_LOOP'] = '1'
 
-        result = subprocess.run(['python3', 'main.py', '--config', self.config_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
+        result = subprocess.run(['python3', self.main_script_path, '--config', self.config_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
         print("STDOUT:", result.stdout)
         print("STDERR:", result.stderr)
         self.assertEqual(result.returncode, 0)
@@ -61,7 +62,7 @@ class TestMainScript(unittest.TestCase):
         # Set environment variable to break the loop
         os.environ['ASI_TEST_BREAK_LOOP'] = '1'
 
-        result = subprocess.run(['python3', 'main.py', '--config', self.config_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
+        result = subprocess.run(['python3', self.main_script_path, '--config', self.config_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
         print("STDOUT:", result.stdout)
         print("STDERR:", result.stderr)
         self.assertEqual(result.returncode, 0)
@@ -83,7 +84,7 @@ class TestMainScript(unittest.TestCase):
         # Set environment variable to break the loop
         os.environ['ASI_TEST_BREAK_LOOP'] = '1'
 
-        result = subprocess.run(['python3', 'main.py', '--log', self.log_path, '--config', self.config_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
+        result = subprocess.run(['python3', self.main_script_path, '--log', self.log_path, '--config', self.config_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
         print("STDOUT:", result.stdout)
         print("STDERR:", result.stderr)
         self.assertEqual(result.returncode, 0)

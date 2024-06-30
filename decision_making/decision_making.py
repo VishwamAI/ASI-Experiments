@@ -1,6 +1,8 @@
 import numpy as np
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-from sklearn.linear_model import LogisticRegression, DecisionTreeClassifier, SVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 
 class DecisionMaking:
@@ -91,8 +93,6 @@ class DecisionMaking:
         - numpy array
             Predictions for the given data.
         """
-        X_train, X_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, random_state=0)
-
         if model_type == 'logistic_regression':
             model = LogisticRegression(random_state=0)
         elif model_type == 'decision_tree':
@@ -102,6 +102,6 @@ class DecisionMaking:
         else:
             raise ValueError(f"Unknown model type: {model_type}")
 
-        model.fit(X_train, y_train)
-        predictions = model.predict(X_test)
+        model.fit(data, labels)
+        predictions = model.predict(data)
         return predictions
