@@ -39,7 +39,7 @@ class TestMainScript(unittest.TestCase):
         # Set environment variable to break the loop
         os.environ['ASI_TEST_BREAK_LOOP'] = '1'
 
-        result = subprocess.run(['python3', '../main.py', '--config', self.config_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
+        result = subprocess.run(['python3', 'main.py', '--config', self.config_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
         print("STDOUT:", result.stdout)
         print("STDERR:", result.stderr)
         self.assertEqual(result.returncode, 0)
@@ -61,7 +61,7 @@ class TestMainScript(unittest.TestCase):
         # Set environment variable to break the loop
         os.environ['ASI_TEST_BREAK_LOOP'] = '1'
 
-        result = subprocess.run(['python3', '../main.py', '--config', self.config_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
+        result = subprocess.run(['python3', 'main.py', '--config', self.config_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
         print("STDOUT:", result.stdout)
         print("STDERR:", result.stderr)
         self.assertEqual(result.returncode, 0)
@@ -83,7 +83,7 @@ class TestMainScript(unittest.TestCase):
         # Set environment variable to break the loop
         os.environ['ASI_TEST_BREAK_LOOP'] = '1'
 
-        result = subprocess.run(['python3', '../main.py', '--log', self.log_path, '--config', self.config_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
+        result = subprocess.run(['python3', 'main.py', '--log', self.log_path, '--config', self.config_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=5)
         print("STDOUT:", result.stdout)
         print("STDERR:", result.stderr)
         self.assertEqual(result.returncode, 0)
