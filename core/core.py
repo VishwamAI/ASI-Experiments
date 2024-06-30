@@ -1,7 +1,10 @@
+from decision_making.decision_making import DecisionMaking
+
 class ASIMainControlLoop:
     def __init__(self):
         # Initialize the ASI system
         self.state = {}
+        self.decision_making = DecisionMaking()
         self.initialize_system()
 
     def initialize_system(self):
@@ -34,7 +37,17 @@ class ASIMainControlLoop:
             if "key" in input_data and input_data["key"] == "value":
                 self.state["decision"] = "decision_based_on_key_value"
             else:
-                self.state["decision"] = "default_decision"
+                # Use the DecisionMaking module to evaluate strategies, assess risks, and predict outcomes
+                data = input_data.get("data", [])
+                labels = input_data.get("labels", [])
+                strategies_results = self.decision_making.evaluate_strategies(data, labels)
+                risks = self.decision_making.assess_risks(data)
+                outcomes = self.decision_making.predict_outcomes(data)
+                self.state["decision"] = {
+                    "strategies_results": strategies_results,
+                    "risks": risks,
+                    "outcomes": outcomes
+                }
         else:
             self.state["decision"] = "default_decision"
         return self.state["decision"]
