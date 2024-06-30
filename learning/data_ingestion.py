@@ -27,6 +27,7 @@ class DataIngestion:
             logging.info(f"Data saved to {file_path}")
         except OSError as e:
             logging.error(f"Error saving data to {file_path}: {e}")
+            raise
 
 if __name__ == "__main__":
     api_urls = ["https://api.example.com/data1", "https://api.example.com/data2"]
