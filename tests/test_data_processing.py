@@ -66,5 +66,47 @@ class TestDataProcessing(unittest.TestCase):
         with self.assertRaises(ValueError):
             handle_missing_values(self.df, strategy='constant')
 
+    def test_handle_missing_values_no_missing_values(self):
+        df_no_missing = pd.DataFrame({
+            'A': [1, 2, 3, 4],
+            'B': [1, 2, 3, 4],
+            'C': [1, 2, 3, 4]
+        })
+        result = handle_missing_values(df_no_missing, strategy='mean')
+        pd.testing.assert_frame_equal(result, df_no_missing, check_dtype=False)
+
+    def test_handle_missing_values_all_missing_in_column(self):
+        df_all_missing = pd.DataFrame({
+            'A': [np.nan, np.nan, np.nan, np.nan],
+            'B': [1, 2, 3, 4],
+            'C': [1, 2, 3, 4]
+        })
+        result = handle_missing_values(df_all_missing, strategy='mean')
+        expected = pd.DataFrame({
+            'A': [np.nan, np.nan, np.nan, np.nan],
+            'B': [1, 2, 3, 4],
+            'C': [1, 2, 3, 4]
+        })
+        pd.testing.assert_frame_equal(result, expected, check_dtype=False)
+
+    def test_handle_missing_values_different_data_types(self):
+        df_mixed_types = pd.DataFrame({
+            'A': [1, 2, np.nan, 4],
+            'B': ['a', 'b', np.nan, 'd'],
+            'C': [1.1, 2.2, np.nan, 4.4]
+        })
+        result = handle_missing_values(df_mixed_types, strategy='mean')
+        expected = pd.DataFrame({
+            'A': [1, 2, 2.333333, 4],
+            'B': ['a', 'b', np.nan, 'd'],
+            'C': [1.1, 2.2, 2.566667, 4.4]
+        })
+        pd.testing.assert_frame_equal(result, expected, check_dtype=False)
+
+    def test_handle_missing_values_empty_dataframe(self):
+        df_empty = pd.DataFrame()
+        result = handle_missing_values(df_empty, strategy='mean')
+        pd.testing.assert_frame_equal(result, df_empty, check_dtype=False)
+
 if __name__ == '__main__':
     unittest.main()

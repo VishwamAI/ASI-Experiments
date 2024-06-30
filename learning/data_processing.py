@@ -16,7 +16,8 @@ def handle_missing_values(df, strategy='mean', fill_value=None):
     - pandas DataFrame with missing values handled.
     """
     if strategy == 'mean':
-        return df.fillna(df.mean())
+        numeric_cols = df.select_dtypes(include=[np.number]).columns
+        return df.fillna(df[numeric_cols].mean())
     elif strategy == 'median':
         return df.fillna(df.median())
     elif strategy == 'mode':
