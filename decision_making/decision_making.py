@@ -51,8 +51,8 @@ class DecisionMaking:
         decisions = ['decision_1', 'decision_2', 'decision_3']
         risks = {}
         for decision in decisions:
-            # Example logic: calculate the variance of the data for each decision
-            risks[decision] = np.var(data)
+            # Example logic: calculate the probability of undesirable events and their potential impact
+            risks[decision] = np.var(data) * np.mean(data)  # Example risk calculation
         return risks
 
     def predict_outcomes(self, data):
@@ -72,7 +72,7 @@ class DecisionMaking:
         outcomes = {}
         for decision in decisions:
             # Example logic: calculate the mean of the data for each decision
-            outcomes[decision] = float(np.mean(data))
+            outcomes[decision] = float(np.mean(data) + np.std(data))  # Example outcome prediction
         return outcomes
 
     def _predict_with_model(self, data, labels, model_type):
