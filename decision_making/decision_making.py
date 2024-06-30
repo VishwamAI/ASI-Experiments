@@ -70,7 +70,7 @@ class DecisionMaking:
         outcomes = {}
         for decision in decisions:
             # Example logic: calculate the sum of the data for each decision
-            outcomes[decision] = np.sum(data)
+            outcomes[decision] = float(np.sum(data))
         return outcomes
 
     def _mock_predictions(self, data, strategy):
