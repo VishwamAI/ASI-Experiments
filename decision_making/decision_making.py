@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, DecisionTreeClassifier, SVC
 from sklearn.model_selection import train_test_split
 
 class DecisionMaking:
@@ -22,11 +22,11 @@ class DecisionMaking:
             A dictionary containing the evaluation results for each strategy.
         """
         # Implementing strategy evaluation logic
-        strategies = ['strategy_1', 'strategy_2', 'strategy_3']
+        strategies = ['logistic_regression', 'decision_tree', 'svm']
         results = {}
         for strategy in strategies:
             # Example logic: calculate performance metrics for each strategy
-            predictions = self._predict_with_logistic_regression(data, labels)
+            predictions = self._predict_with_model(data, labels, strategy)
             results[strategy] = {
                 'accuracy': accuracy_score(labels, predictions),
                 'precision': precision_score(labels, predictions, average='weighted'),
@@ -75,22 +75,33 @@ class DecisionMaking:
             outcomes[decision] = float(np.mean(data))
         return outcomes
 
-    def _predict_with_logistic_regression(self, data, labels):
+    def _predict_with_model(self, data, labels, model_type):
         """
-        Generate predictions using logistic regression.
+        Generate predictions using different machine learning models.
 
         Parameters:
         - data: numpy array or pandas DataFrame
             The data to be used for generating predictions.
         - labels: numpy array or pandas Series
             The true labels for the data.
+        - model_type: str
+            The type of model to use for predictions.
 
         Returns:
         - numpy array
             Predictions for the given data.
         """
         X_train, X_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, random_state=0)
-        model = LogisticRegression(random_state=0)
+
+        if model_type == 'logistic_regression':
+            model = LogisticRegression(random_state=0)
+        elif model_type == 'decision_tree':
+            model = DecisionTreeClassifier(random_state=0)
+        elif model_type == 'svm':
+            model = SVC(random_state=0)
+        else:
+            raise ValueError(f"Unknown model type: {model_type}")
+
         model.fit(X_train, y_train)
         predictions = model.predict(X_test)
         return predictions
