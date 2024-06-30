@@ -28,12 +28,12 @@ class DecisionMaking:
         results = {}
         for strategy in strategies:
             # Example logic: calculate performance metrics for each strategy
-            predictions = self._predict_with_model(data, labels, strategy)
+            predictions, y_test = self._predict_with_model(data, labels, strategy)
             results[strategy] = {
-                'accuracy': accuracy_score(labels, predictions),
-                'precision': precision_score(labels, predictions, average='weighted'),
-                'recall': recall_score(labels, predictions, average='weighted'),
-                'f1_score': f1_score(labels, predictions, average='weighted')
+                'accuracy': accuracy_score(y_test, predictions),
+                'precision': precision_score(y_test, predictions, average='weighted'),
+                'recall': recall_score(y_test, predictions, average='weighted'),
+                'f1_score': f1_score(y_test, predictions, average='weighted')
             }
         return results
 
@@ -90,8 +90,8 @@ class DecisionMaking:
             The type of model to use for predictions.
 
         Returns:
-        - numpy array
-            Predictions for the given data.
+        - tuple
+            A tuple containing the predictions and the true labels for the testing set.
         """
         if model_type == 'logistic_regression':
             model = LogisticRegression(random_state=0)
@@ -102,6 +102,12 @@ class DecisionMaking:
         else:
             raise ValueError(f"Unknown model type: {model_type}")
 
-        model.fit(data, labels)
-        predictions = model.predict(data)
-        return predictions
+        # Split the data into training and testing sets
+        X_train, X_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, random_state=0)
+
+        # Fit the model on the training data
+        model.fit(X_train, y_train)
+
+        # Generate predictions on the testing data
+        predictions = model.predict(X_test)
+        return predictions, y_test
