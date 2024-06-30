@@ -13,8 +13,18 @@ class ASIMainControlLoop:
         }
 
     def process_input(self, input_data):
-        # Placeholder for input processing logic
-        self.state["input_data"] = input_data
+        # Enhanced input processing logic
+        if isinstance(input_data, dict):
+            self.state["input_data"] = input_data
+        else:
+            # Handle different formats and types of input data
+            try:
+                # Example: Convert input data to a dictionary if it's a JSON string
+                import json
+                self.state["input_data"] = json.loads(input_data)
+            except (TypeError, ValueError):
+                # If input data is not a valid JSON string, set it to None
+                self.state["input_data"] = None
 
     def make_decision(self):
         # Enhanced decision-making logic
