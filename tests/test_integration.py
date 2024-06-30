@@ -13,8 +13,11 @@ class TestIntegration(unittest.TestCase):
 
     def test_integration_decision_making(self):
         input_data = {
-            "data": [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
-            "labels": [0, 1, 1]
+            "data": [
+                [1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12], [13, 14, 15],
+                [16, 17, 18], [19, 20, 21], [22, 23, 24], [25, 26, 27], [28, 29, 30]
+            ],
+            "labels": [0, 1, 1, 0, 1, 0, 1, 0, 1, 0]
         }
         self.asi.process_input(input_data)
         decision = self.asi.make_decision()
