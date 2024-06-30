@@ -23,6 +23,31 @@ To run the ASI system, use the following command:
 python main.py
 ```
 
+### Command-Line Arguments
+The `main.py` script supports the following command-line arguments:
+- `--config`: Path to the configuration file (default: `config.json`)
+- `--log`: Path to the log file (default: `asi.log`)
+
+Example usage with command-line arguments:
+```bash
+python main.py --config custom_config.json --log custom_log.log
+```
+
+### Configuration
+The ASI system can be configured using a JSON file. The default configuration file is `config.json`. Below is an example configuration:
+```json
+{
+  "parameter1": "value1",
+  "parameter2": "value2"
+}
+```
+
+## Running Tests
+To run the unit tests for the ASI system, use the following command:
+```bash
+python -m unittest discover tests
+```
+
 ## Contributing
 We welcome contributions to the ASI Project. To contribute, please follow these guidelines:
 1. Fork the repository.
